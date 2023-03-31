@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './modules/auth.module'; // Asegúrate de que la ruta de importación sea correcta
+import { AuthModule } from './modules/auth.module';
+import { CompanyModule } from './modules/companies.module';
 import { User } from './entities/user.entity';
+import { Company } from './entities/companies.entity';
 
 @Module({
   imports: [
@@ -12,10 +14,11 @@ import { User } from './entities/user.entity';
       username: 'myusername',
       password: 'mypassword',
       database: 'digital-seller',
-      entities: [User],
+      entities: [User, Company],
       synchronize: true,
     }),
     AuthModule,
+    CompanyModule,
   ],
 })
 export class AppModule {}
