@@ -9,6 +9,32 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
+    const { username, password } = createUserDto;
+
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    const regexEmail = /\S+@\S+\.\S+/;
+
+    if (!regex.test(password)) {
+      return {
+        message:
+          'Password must have at least 8 characters, one uppercase, one lowercase, one number and one special character',
+      };
+    }
+
+    if (username.length < 4) {
+      return {
+        message: 'Username must have at least 4 characters',
+      };
+    }
+
+    if (!regexEmail.test(username)) {
+      return {
+        message: 'Username must be a valid email',
+      };
+    }
+
     return this.authService.register(createUserDto);
   }
 
