@@ -1,34 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { User } from '../schemas/user.schema';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
+import { DocumentType } from '@typegoose/typegoose';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectModel(User.name)
+    private readonly userModel: Model<DocumentType<User>>,
     private readonly jwtService: JwtService,
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    const user = new User();
+    const user = new this.userModel();
     user.username = createUserDto.username;
     const salt = await bcrypt.genSalt(); // generate a salt
     user.password = await bcrypt.hash(createUserDto.password, salt); // hash the password with the salt
-    await this.userRepository.save(user);
+    await user.save();
     return user;
   }
 
   async login(loginUserDto: LoginUserDto) {
-    const user = await this.userRepository.findOne({
-      where: {
-        username: loginUserDto.username,
-      },
+    const user = await this.userModel.findOne({
+      username: loginUserDto.username,
     });
 
     if (!user) {

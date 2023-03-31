@@ -1,16 +1,7 @@
-import { User } from '../entities/user.entity';
-import { Company } from '../entities/companies.entity';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { MongooseModuleOptions } from '@nestjs/mongoose';
 
-const ormconfig: TypeOrmModuleOptions = {
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'myusername',
-  password: 'mypassword',
-  database: 'digital-seller',
-  entities: [User, Company],
-  synchronize: true,
+const mongooseConfig: MongooseModuleOptions = {
+  uri: 'mongodb://localhost:27017/digital-seller',
 };
 
-export default ormconfig;
+export default mongooseConfig;

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
-import { User } from '../entities/user.entity';
+import { User, UserSchema } from '../schemas/user.schema';
 import { AuthService } from '../services/user.service';
 import { AuthController } from '../controller/user.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({
       secret: 'your-secret-key', // Reemplaza esto con una clave secreta real
       signOptions: { expiresIn: '60m' },
