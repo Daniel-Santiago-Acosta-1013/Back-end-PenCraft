@@ -18,8 +18,8 @@ export class AuthService {
   async register(createUserDto: CreateUserDto) {
     const user = new this.userModel();
     user.username = createUserDto.username;
-    const salt = await bcrypt.genSalt(); // generate a salt
-    user.password = await bcrypt.hash(createUserDto.password, salt); // hash the password with the salt
+    const salt = await bcrypt.genSalt();
+    user.password = await bcrypt.hash(createUserDto.password, salt);
     await user.save();
     return user;
   }
