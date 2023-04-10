@@ -6,13 +6,12 @@ import { LoginUserDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-import { DocumentType } from '@typegoose/typegoose';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name)
-    private readonly userModel: Model<DocumentType<User>>,
+    @InjectModel('User')
+    private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
   ) {}
 

@@ -1,7 +1,4 @@
-import { MongooseModuleOptions } from '@nestjs/mongoose';
-
-const mongooseConfig: MongooseModuleOptions = {
-  uri: 'mongodb://localhost:27017/digital-seller',
-};
+const mongooseConfig =
+  'mongodb+srv://santiAcosta:7qCusBqTqHOV7nKH@cluster0.ecsrnot.mongodb.net/test';
 
 export default mongooseConfig;
