@@ -22,11 +22,19 @@ export class ProductController {
 
   @Get()
   async findAll() {
-    return this.productService.findAll();
+    const products = await this.productService.findAll();
+    if (products.length === 0) {
+      return 'No hay productos';
+    }
+    return products;
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
+    const product = await this.productService.findOne(id);
+    if (!product) {
+      return 'No existe un producto con ese id';
+    }
     return this.productService.findOne(id);
   }
 
@@ -35,6 +43,7 @@ export class ProductController {
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
   ) {
+    // ca
     return this.productService.update(id, updateProductDto);
   }
 
