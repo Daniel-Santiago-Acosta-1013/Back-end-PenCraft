@@ -7,8 +7,6 @@ import { AuthController } from '../controller/user.controller';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-console.log(process.env.JWT_SECRET);
-
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
