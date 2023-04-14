@@ -1,4 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
@@ -40,6 +46,11 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.login(loginUserDto);
+    try {
+      return await this.authService.login(loginUserDto);
+    } catch (error) {
+      const errorMessage = 'Invalid username or password';
+      throw new HttpException(errorMessage, HttpStatus.UNAUTHORIZED);
+    }
   }
 }
