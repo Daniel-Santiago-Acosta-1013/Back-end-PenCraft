@@ -5,13 +5,14 @@ import { UserSchema } from '../schemas/user.schema';
 import { AuthService } from '../services/user.service';
 import { AuthController } from '../controllers/user.controller';
 import * as dotenv from 'dotenv';
+import globalEnvs from 'src/utils/globalEnvs';
 dotenv.config();
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.register({
-      secret: process.env.JWT_SECRET, // Reemplaza esto con una clave secreta real
+      secret: globalEnvs.JWT_SECRET, // Reemplaza esto con una clave secreta real
       signOptions: { expiresIn: '60m' },
     }),
   ],
