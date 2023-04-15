@@ -1,6 +1,5 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import globalEnvs from 'src/utils/globalEnvs';
 
-const mongooseConfig = process.env.DB_URI;
+const mongooseConfig = globalEnvs.DB_URI;
 
 export default mongooseConfig;
