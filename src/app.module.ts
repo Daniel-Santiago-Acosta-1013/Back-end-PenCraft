@@ -4,6 +4,7 @@ import { AuthModule } from './modules/auth.module';
 import { ProductModule } from './modules/product.module';
 import { EmployeeModule } from './modules/employee.module';
 import { CompanyModule } from './modules/company.module';
+import { UserDataModule } from './modules/userData.module';
 import mongooseConfig from './config/ORMconfig';
 
 @Module({
@@ -13,6 +14,7 @@ import mongooseConfig from './config/ORMconfig';
     ProductModule,
     EmployeeModule,
     CompanyModule,
+    UserDataModule
   ],
 })
 export class AppModule {}
