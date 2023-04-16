@@ -5,7 +5,7 @@ const PORT = 4202 || process.env.port;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const allowedOrigins = ['http://localhost:5500'];
+  const allowedOrigins = ['http://localhost:4201'];
 
   // Habilitar CORS
   app.enableCors({
