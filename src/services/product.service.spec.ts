@@ -1,9 +1,11 @@
+// product.service.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService } from './product.service';
+import { ProductService } from '../services/product.service';
 import { Model } from 'mongoose';
 import { Product } from '../schemas/product.schema';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
+import * as mongoose from 'mongoose';
 
 const mockProductModel = () => ({
   find: jest.fn(),
@@ -50,7 +52,9 @@ describe('ProductService', () => {
         ...createProductDto,
       };
 
-      productModel.prototype.save = jest.fn().mockResolvedValue(createdProduct);
+      jest
+        .spyOn(productModel.prototype, 'save')
+        .mockResolvedValue(createdProduct);
 
       const result = await productService.create(createProductDto);
       expect(result).toEqual(createdProduct);
@@ -73,13 +77,19 @@ describe('ProductService', () => {
           price: 19.99,
         },
       ];
-
-      productModel.find = jest.fn().mockResolvedValue(products);
-
+  
+      jest.spyOn(productModel, 'find').mockImplementation(() =>
+        ({
+          exec: jest.fn().mockResolvedValue(products),
+        } as unknown as mongoose.Query<Product[], Product>),
+      );
+  
       const result = await productService.findAll();
       expect(result).toEqual(products);
     });
   });
+  
+  
 
   describe('findOne', () => {
     it('should return a product by ID', async () => {
@@ -90,7 +100,7 @@ describe('ProductService', () => {
         price: 9.99,
       };
 
-      productModel.findById = jest.fn().mockResolvedValue(product);
+      jest.spyOn(productModel, 'findById').mockResolvedValue(product);
 
       const result = await productService.findOne('1');
       expect(result).toEqual(product);
@@ -110,12 +120,13 @@ describe('ProductService', () => {
         ...updateProductDto,
       };
 
-      productModel.findByIdAndUpdate = jest
-        .fn()
+      jest
+        .spyOn(productModel, 'findByIdAndUpdate')
         .mockResolvedValue(updatedProduct);
-      productModel.findById = jest.fn().mockResolvedValue(updatedProduct);
+      jest.spyOn(productModel, 'findById').mockResolvedValue(updatedProduct);
 
       const result = await productService.update('1', updateProductDto);
+
       expect(result).toEqual(updatedProduct);
       expect(productModel.findByIdAndUpdate).toHaveBeenCalledWith(
         '1',
@@ -132,14 +143,14 @@ describe('ProductService', () => {
         description: 'This is product 1',
         price: 9.99,
       };
-
-      productModel.findByIdAndDelete = jest
-        .fn()
-        .mockResolvedValue(productToDelete);
-
+  
+      jest.spyOn(productModel, 'findByIdAndDelete').mockResolvedValue(productToDelete as any);
+  
       const result = await productService.delete('1');
       expect(result).toEqual(productToDelete);
       expect(productModel.findByIdAndDelete).toHaveBeenCalledWith('1');
     });
   });
+  
+  
 });
