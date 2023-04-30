@@ -25,25 +25,30 @@ export class AuthService {
   }
 
   async login(loginUserDto: LoginUserDto) {
+    console.log('Login attempt:', loginUserDto); // Log the incoming data
     const user = await this.userModel.findOne({
       username: loginUserDto.username,
     });
-
+  
     if (!user) {
+      console.log('User not found:', loginUserDto.username); // Log if the user is not found
       throw new Error('Invalid credentials');
     }
-
+  
     const passwordMatch = await bcrypt.compare(
       loginUserDto.password,
       user.password,
-    ); // compare the provided password with the stored hash
-
+    );
+  
     if (!passwordMatch) {
+      console.log('Password mismatch:', loginUserDto.password, user.password); // Log if the password does not match
       throw new Error('Invalid credentials');
     }
-
+  
     const payload = { username: user.username, sub: user.id };
     const token = this.jwtService.sign(payload);
+    console.log('Login success:', payload); // Log the successful login
     return { token };
   }
+  
 }
