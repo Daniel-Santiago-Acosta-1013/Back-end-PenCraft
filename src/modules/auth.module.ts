@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { UserSchema } from '../schemas/user.schema';
+import { User } from '../entities/user.entity';
 import { AuthService } from '../services/user.service';
-import { AuthController } from '../controllers/user.controller';
-import * as dotenv from 'dotenv';
-import globalEnvs from 'src/utils/globalEnvs';
-dotenv.config();
+import { AuthController } from '../controller/user.controller';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: globalEnvs.JWT_SECRET, // Reemplaza esto con una clave secreta real
+      secret: 'your-secret-key', // Reemplaza esto con una clave secreta real
       signOptions: { expiresIn: '60m' },
     }),
   ],

@@ -1,5 +1,15 @@
-import globalEnvs from 'src/utils/globalEnvs';
+import { User } from '../entities/user.entity';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-const mongooseConfig = globalEnvs.DB_URI;
+const ormconfig: TypeOrmModuleOptions = {
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'myusername',
+  password: 'mypassword',
+  database: 'digital-seller',
+  entities: [User],
+  synchronize: true,
+};
 
-export default mongooseConfig;
+export default ormconfig;

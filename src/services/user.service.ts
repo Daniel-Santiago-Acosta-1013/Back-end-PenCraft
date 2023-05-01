@@ -1,54 +1,51 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../schemas/user.schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Model } from 'mongoose';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel('User')
-    private readonly userModel: Model<User>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    const user = new this.userModel();
+    const user = new User();
     user.username = createUserDto.username;
-    const salt = await bcrypt.genSalt();
-    user.password = await bcrypt.hash(createUserDto.password, salt);
-    await user.save();
+    const salt = await bcrypt.genSalt(); // generate a salt
+    user.password = await bcrypt.hash(createUserDto.password, salt); // hash the password with the salt
+    await this.userRepository.save(user);
     return user;
   }
 
   async login(loginUserDto: LoginUserDto) {
-    console.log('Login attempt:', loginUserDto); // Log the incoming data
-    const user = await this.userModel.findOne({
-      username: loginUserDto.username,
+    const user = await this.userRepository.findOne({
+      where: {
+        username: loginUserDto.username,
+      },
     });
-  
+
     if (!user) {
-      console.log('User not found:', loginUserDto.username); // Log if the user is not found
       throw new Error('Invalid credentials');
     }
-  
+
     const passwordMatch = await bcrypt.compare(
       loginUserDto.password,
       user.password,
-    );
-  
+    ); // compare the provided password with the stored hash
+
     if (!passwordMatch) {
-      console.log('Password mismatch:', loginUserDto.password, user.password); // Log if the password does not match
       throw new Error('Invalid credentials');
     }
-  
+
     const payload = { username: user.username, sub: user.id };
     const token = this.jwtService.sign(payload);
-    console.log('Login success:', payload); // Log the successful login
     return { token };
   }
-  
 }
