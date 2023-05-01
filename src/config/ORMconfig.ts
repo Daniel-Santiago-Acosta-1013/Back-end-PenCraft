@@ -1,4 +1,5 @@
 import { User } from '../entities/user.entity';
+import { Note } from '../entities/note.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import globalEnvs from 'src/utils/globalEnvs';
 
@@ -9,7 +10,7 @@ const ormconfig: TypeOrmModuleOptions = {
   username: globalEnvs.USERNAME,
   password: globalEnvs.PASSWORD,
   database: globalEnvs.DATABASE,
-  entities: [User],
+  entities: [User, Note],
   synchronize: true,
 };
 
