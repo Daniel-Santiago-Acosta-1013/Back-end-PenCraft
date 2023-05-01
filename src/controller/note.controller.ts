@@ -43,7 +43,6 @@ export class NotesController {
   }
 
   @Put(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   update(
     @GetUser() user: User,
@@ -54,8 +53,8 @@ export class NotesController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@GetUser() user: User, @Param('id') id: string) {
-    return this.notesService.remove(user, id);
+  @HttpCode(HttpStatus.OK)
+  async remove(@GetUser() user: User, @Param('id') id: string) {
+    return await this.notesService.remove(user, id);
   }
 }
