@@ -38,8 +38,8 @@ export class AuthService {
     const passwordMatch = await bcrypt.compare(
       loginUserDto.password,
       user.password,
-    ); // compare the provided password with the stored hash
-
+    );
+    
     if (!passwordMatch) {
       throw new Error('Invalid credentials');
     }

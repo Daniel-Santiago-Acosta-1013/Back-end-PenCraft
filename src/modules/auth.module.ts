@@ -9,7 +9,7 @@ import { AuthController } from '../controller/user.controller';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'your-secret-key', // Reemplaza esto con una clave secreta real
+      secret: 'your-secret-key',
       signOptions: { expiresIn: '60m' },
     }),
   ],
