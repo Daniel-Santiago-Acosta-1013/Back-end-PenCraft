@@ -12,6 +12,7 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { NotesService } from '../services/note.service';
 import { CreateNoteDto } from '../dto/create-note.dto';
@@ -19,6 +20,12 @@ import { UpdateNoteDto } from '../dto/update-note.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { GetUser } from '../decorators/get-user.decorator';
 import { User } from '../entities/user.entity';
+
+function isValidUUID(uuid: string): boolean {
+  const regex =
+    /^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$/;
+  return regex.test(uuid);
+}
 
 @Controller('notes')
 @UseGuards(JwtAuthGuard)
@@ -39,6 +46,9 @@ export class NotesController {
 
   @Get(':id')
   findOne(@GetUser() user: User, @Param('id') id: string) {
+    if (!isValidUUID(id)) {
+      throw new BadRequestException('Invalid UUID format.');
+    }
     return this.notesService.findOne(user, id);
   }
 
@@ -49,12 +59,17 @@ export class NotesController {
     @Param('id') id: string,
     @Body() updateNoteDto: UpdateNoteDto,
   ) {
+    if (!isValidUUID(id)) {
+      throw new BadRequestException('Invalid UUID format.');
+    }
     return this.notesService.update(user, id, updateNoteDto);
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  async remove(@GetUser() user: User, @Param('id') id: string) {
-    return await this.notesService.remove(user, id);
+  remove(@GetUser() user: User, @Param('id') id: string) {
+    if (!isValidUUID(id)) {
+      throw new BadRequestException('Invalid UUID format.');
+    }
+    return this.notesService.remove(user, id);
   }
 }
