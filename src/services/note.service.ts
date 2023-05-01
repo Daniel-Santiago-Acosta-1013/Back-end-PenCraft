@@ -27,13 +27,13 @@ export class NotesService {
     return this.noteRepository.find({ where: { user } });
   }
 
-  async findOne(user: User, id: number): Promise<Note> {
+  async findOne(user: User, id: string): Promise<Note> {
     return this.noteRepository.findOneOrFail({ where: { user, id } });
   }
 
   async update(
     user: User,
-    id: number,
+    id: string,
     updateNoteDto: UpdateNoteDto,
   ): Promise<Note> {
     const note = await this.findOne(user, id);
@@ -47,7 +47,7 @@ export class NotesService {
     return this.noteRepository.save(note);
   }
 
-  async remove(user: User, id: number): Promise<void> {
+  async remove(user: User, id: string): Promise<void> {
     const note = await this.findOne(user, id);
     await this.noteRepository.remove(note);
   }

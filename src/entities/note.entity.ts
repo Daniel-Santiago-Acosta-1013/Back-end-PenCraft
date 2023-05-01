@@ -4,7 +4,7 @@ import { User } from './user.entity';
 @Entity()
 export class Note {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   title: string;

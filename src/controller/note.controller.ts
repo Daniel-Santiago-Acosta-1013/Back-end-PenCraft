@@ -38,7 +38,7 @@ export class NotesController {
   }
 
   @Get(':id')
-  findOne(@GetUser() user: User, @Param('id') id: number) {
+  findOne(@GetUser() user: User, @Param('id') id: string) {
     return this.notesService.findOne(user, id);
   }
 
@@ -47,7 +47,7 @@ export class NotesController {
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   update(
     @GetUser() user: User,
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() updateNoteDto: UpdateNoteDto,
   ) {
     return this.notesService.update(user, id, updateNoteDto);
@@ -55,7 +55,7 @@ export class NotesController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@GetUser() user: User, @Param('id') id: number) {
+  remove(@GetUser() user: User, @Param('id') id: string) {
     return this.notesService.remove(user, id);
   }
 }
