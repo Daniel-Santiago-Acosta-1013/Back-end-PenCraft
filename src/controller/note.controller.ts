@@ -1,4 +1,3 @@
-// src/controller/notes.controller.ts
 import {
   Controller,
   Get,
