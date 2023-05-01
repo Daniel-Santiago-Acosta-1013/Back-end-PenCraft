@@ -32,7 +32,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   async login(@Body() loginUserDto: LoginUserDto) {
-
     try {
       return await this.authService.login(loginUserDto);
     } catch (error) {

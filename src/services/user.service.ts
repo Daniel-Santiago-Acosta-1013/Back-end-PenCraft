@@ -39,7 +39,7 @@ export class AuthService {
       loginUserDto.password,
       user.password,
     );
-    
+
     if (!passwordMatch) {
       throw new Error('Invalid credentials');
     }

@@ -31,7 +31,11 @@ export class NotesService {
     return this.noteRepository.findOneOrFail({ where: { user, id } });
   }
 
-  async update(user: User, id: number, updateNoteDto: UpdateNoteDto): Promise<Note> {
+  async update(
+    user: User,
+    id: number,
+    updateNoteDto: UpdateNoteDto,
+  ): Promise<Note> {
     const note = await this.findOne(user, id);
     if (updateNoteDto.title) {
       note.title = updateNoteDto.title;
